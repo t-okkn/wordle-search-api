@@ -2,6 +2,35 @@ package main
 
 // 単語辞書は https://github.com/kujirahand/EJDict よりお借りしました。
 
+const (
+	LOWA rune = 97
+	LOWB rune = 98
+	LOWC rune = 99
+	LOWD rune = 100
+	LOWE rune = 101
+	LOWF rune = 102
+	LOWG rune = 103
+	LOWH rune = 104
+	LOWI rune = 105
+	LOWJ rune = 106
+	LOWK rune = 107
+	LOWL rune = 108
+	LOWM rune = 109
+	LOWN rune = 110
+	LOWO rune = 111
+	LOWP rune = 112
+	LOWQ rune = 113
+	LOWR rune = 114
+	LOWS rune = 115
+	LOWT rune = 116
+	LOWU rune = 117
+	LOWV rune = 118
+	LOWW rune = 119
+	LOWX rune = 120
+	LOWY rune = 121
+	LOWZ rune = 122
+)
+
 var Words = [3413]string{
 	"Aaron", "Aesop", "Alamo", "Aleut", "Allah", "Amish", "Andes",
 	"Angus", "April", "Arden", "Argus", "Aries", "Aryan", "Asian",
