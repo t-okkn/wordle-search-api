@@ -1,123 +1,18 @@
 package main
 
 const (
-	ELOWA rune = 97     // a
-	ELOWB rune = 98     // b
-	ELOWC rune = 99     // c
-	ELOWD rune = 100    // d
-	ELOWE rune = 101    // e
-	ELOWF rune = 102    // f
-	ELOWG rune = 103    // g
-	ELOWH rune = 104    // h
-	ELOWI rune = 105    // i
-	ELOWJ rune = 106    // j
-	ELOWK rune = 107    // k
-	ELOWL rune = 108    // l
-	ELOWM rune = 109    // m
-	ELOWN rune = 110    // n
-	ELOWO rune = 111    // o
-	ELOWP rune = 112    // p
-	ELOWQ rune = 113    // q
-	ELOWR rune = 114    // r
-	ELOWS rune = 115    // s
-	ELOWT rune = 116    // t
-	ELOWU rune = 117    // u
-	ELOWV rune = 118    // v
-	ELOWW rune = 119    // w
-	ELOWX rune = 120    // x
-	ELOWY rune = 121    // y
-	ELOWZ rune = 122    // z
-	JHA   rune = 12354  // あ
-	JHI   rune = 12356  // い
-	JHU   rune = 12358  // う
-	JHE   rune = 12360  // え
-	JHO   rune = 12362  // お
-	JHKA  rune = 12363  // か
-	JHKI  rune = 12365  // き
-	JHKU  rune = 12367  // く
-	JHKE  rune = 12369  // け
-	JHKO  rune = 12371  // こ
-	JHSA  rune = 12373  // さ
-	JHSI  rune = 12375  // し
-	JHSU  rune = 12377  // す
-	JHSE  rune = 12379  // せ
-	JHSO  rune = 12381  // そ
-	JHTA  rune = 12383  // た
-	JHTI  rune = 12385  // ち
-	JHTU  rune = 12388  // つ
-	JHTE  rune = 12390  // て
-	JHTO  rune = 12392  // と
-	JHNA  rune = 12394  // な
-	JHNI  rune = 12395  // に
-	JHNU  rune = 12396  // ぬ
-	JHNE  rune = 12397  // ね
-	JHNO  rune = 12398  // の
-	JHHA  rune = 12399  // は
-	JHHI  rune = 12402  // ひ
-	JHHU  rune = 12405  // ふ
-	JHHE  rune = 12408  // へ
-	JHHO  rune = 12411  // ほ
-	JHMA  rune = 12414  // ま
-	JHMI  rune = 12415  // み
-	JHMU  rune = 12416  // む
-	JHME  rune = 12417  // め
-	JHMO  rune = 12418  // も
-	JHYA  rune = 12420  // や
-	JHYU  rune = 12422  // ゆ
-	JHYO  rune = 12424  // よ
-	JHRA  rune = 12425  // ら
-	JHRI  rune = 12426  // り
-	JHRU  rune = 12427  // る
-	JHRE  rune = 12428  // れ
-	JHRO  rune = 12429  // ろ
-	JHWA  rune = 12431  // わ
-	JHWO  rune = 12434  // を
-	JHNN  rune = 12435  // ん
-	JHGA  rune = 12364  // が
-	JHGI  rune = 12366  // ぎ
-	JHGU  rune = 12368  // ぐ
-	JHGE  rune = 12370  // げ
-	JHGO  rune = 12372  // ご
-	JHZA  rune = 12374  // ざ
-	JHZI  rune = 12376  // じ
-	JHZU  rune = 12378  // ず
-	JHZE  rune = 12380  // ぜ
-	JHZO  rune = 12382  // ぞ
-	JHDA  rune = 12384  // だ
-	JHDI  rune = 12386  // ぢ
-	JHDU  rune = 12389  // づ
-	JHDE  rune = 12391  // で
-	JHDO  rune = 12393  // ど
-	JHBA  rune = 12400  // ば
-	JHBI  rune = 12403  // び
-	JHBU  rune = 12406  // ぶ
-	JHBE  rune = 12409  // べ
-	JHBO  rune = 12412  // ぼ
-	JHPA  rune = 12401  // ぱ
-	JHPI  rune = 12404  // ぴ
-	JHPU  rune = 12407  // ぷ
-	JHPE  rune = 12410  // ぺ
-	JHPO  rune = 12413  // ぽ
-	JHXA  rune = 12353  // ぁ
-	JHXI  rune = 12355  // ぃ
-	JHXU  rune = 12357  // ぅ
-	JHXE  rune = 12359  // ぇ
-	JHXO  rune = 12361  // ぉ
-	JHXYA rune = 12419  // ゃ
-	JHXYU rune = 12421  // ゅ
-	JHXYO rune = 12423  // ょ
-	JHXTU rune = 12387  // っ
-	JCHOU rune = 12540  // ー
+	HYPHEN  rune = 45
+	DELETED rune = 68
 )
 
 // a-z
-var AllowEN = [26]rune{
+var AllowEN = []rune{
 	97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109,
 	110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
 }
 
 // ぁ-ん（ゐゑ除外）, ー
-var AllowJA = [81]rune{
+var AllowJA = []rune{
 	12353, 12354, 12355, 12356, 12357, 12358, 12359, 12360, 12361,
 	12362, 12363, 12364, 12365, 12366, 12367, 12368, 12369, 12370,
 	12371, 12372, 12373, 12374, 12375, 12376, 12377, 12378, 12379,
@@ -131,7 +26,7 @@ var AllowJA = [81]rune{
 
 // Wordle の辞書
 // <https://github.com/alex1770/wordle/blob/main/wordlist_all>
-var EWordsAll = [12972]string{
+var EWordsAll = []string{
 	"aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "abled",
 	"abode", "abort", "about", "above", "abuse", "abyss", "acorn", "acrid",
 	"actor", "acute", "adage", "adapt", "adept", "admin", "admit", "adobe",
@@ -1758,7 +1653,7 @@ var EWordsAll = [12972]string{
 
 // Wordle の辞書（答え）
 // <https://github.com/alex1770/wordle/blob/main/wordlist_hidden>
-var EWordsAns = [2315]string{
+var EWordsAns = []string{
 	"aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "abled",
 	"abode", "abort", "about", "above", "abuse", "abyss", "acorn", "acrid",
 	"actor", "acute", "adage", "adapt", "adept", "admin", "admit", "adobe",
@@ -2053,7 +1948,7 @@ var EWordsAns = [2315]string{
 
 // WORDLEja の辞書
 // <https://github.com/aseruneko/aseruneko.github.io/blob/master/WORDLEja/main.js>
-var JWords = [2939]string{
+var JWords = []string{
 	"あーけーど", "あーちすと", "あーもんど", "あいえんか", "あいきゅー",
 	"あいきょう", "あいことば", "あいしゅう", "あいしょう", "あいしょう",
 	"あいじょう", "あいだがら", "あいちゃく", "あいでぃあ", "あいてぃー",
