@@ -195,7 +195,7 @@ func (v Lang) getSearcher(req models.RequestSet) map[int][]rune {
 	}
 
 	// ----- クエリについての処理フェーズ -----
-	if req.Query == "-----" {
+	if req.Query != "-----" {
 		for pos, qchar := range req.Query {
 			if qchar == HYPHEN {
 				continue
@@ -256,7 +256,11 @@ func (v Lang) getSearcher(req models.RequestSet) map[int][]rune {
 
 func (v Lang) getResult(ss models.SearcherSet, answer string) []string {
 	ans := strings.ToLower(answer)
-	include := []rune(ss.Include)
+
+	include := make([]string, 0, 5)
+	for _, s := range ss.Include {
+		include = append(include, string(s))
+	}
 
 	list := []string{}
 	if v == EN {
@@ -273,14 +277,30 @@ func (v Lang) getResult(ss models.SearcherSet, answer string) []string {
 	want := make([]string, 0, len(list))
 
 	for _, word := range list {
-		for pos, char := range word {
-			if !contains(char, include) {
-				continue
+		if len(include) != 0 {
+			in_count := 0
+
+			for _, i := range include {
+				if strings.Contains(word, i) {
+					in_count += 1
+				}
 			}
 
-			if contains(char, ss.Searcher[pos+1]) {
-				want = append(want, word)
+			if in_count < len(include) {
+				continue
 			}
+		}
+
+		ok := 0
+
+		for pos, char := range word {
+			if contains(char, ss.Searcher[pos+1]) {
+				ok += 1
+			}
+		}
+
+		if ok == 5 {
+			want = append(want, word)
 		}
 	}
 
@@ -302,7 +322,9 @@ func contains(r rune, list []rune) bool {
 }
 
 func separateString(input string) string {
-	if input == "" { return "" }
+	if input == "" {
+		return ""
+	}
 
 	words_count := len([]rune(input))
 	if words_count == 1 {
@@ -314,7 +336,7 @@ func separateString(input string) string {
 
 	for pos, i := range input {
 		if pos != 0 {
-			sb.WriteString(", ")
+			sb.WriteString(",")
 		}
 
 		sb.WriteRune(i)
