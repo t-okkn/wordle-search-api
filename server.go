@@ -98,6 +98,7 @@ func (v Lang) getResponses(c *gin.Context, isSearch bool) {
 
 	ss.Searcher = make(map[int][]rune, 5)
 	s := v.getSearcher(req)
+	is_err := false
 
 	for key, val := range s {
 		ss.Searcher[key] = make([]rune, 0, len(s[key]))
@@ -107,6 +108,17 @@ func (v Lang) getResponses(c *gin.Context, isSearch bool) {
 				ss.Searcher[key] = append(ss.Searcher[key], r)
 			}
 		}
+
+		if len(ss.Searcher[key]) == 0 {
+			is_err = true
+			break
+		}
+	}
+
+	if is_err {
+		c.JSON(http.StatusBadRequest, errConflictOptions)
+		c.Abort()
+		return
 	}
 
 	result := v.getResult(ss, answer)
