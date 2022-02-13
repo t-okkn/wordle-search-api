@@ -159,9 +159,9 @@ func (v Lang) sanitize(input string) string {
 		list = AllowJA
 	}
 
-	for _, c := range input {
-		if contains(c, list) {
-			sb.WriteRune(c)
+	for _, char := range input {
+		if contains(char, list) {
+			sb.WriteRune(char)
 		} else {
 			sb.WriteString("-")
 		}
@@ -208,7 +208,7 @@ func (v Lang) getSearcher(req models.RequestSet) map[int][]rune {
 
 	// ----- クエリについての処理フェーズ -----
 	if req.Query != "-----" {
-		for pos, qchar := range req.Query {
+		for pos, qchar := range []rune(req.Query) {
 			if qchar == HYPHEN {
 				continue
 			}
@@ -305,7 +305,7 @@ func (v Lang) getResult(ss models.SearcherSet, answer string) []string {
 
 		ok := 0
 
-		for pos, char := range word {
+		for pos, char := range []rune(word) {
 			if contains(char, ss.Searcher[pos+1]) {
 				ok += 1
 			}
