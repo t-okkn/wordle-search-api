@@ -1,0 +1,338 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Wordle単語絞り込み検索API
+  description:
+    Wordleで単語を絞り込み検索するためのAPIです。
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/mit-license.php
+servers:
+  - url: https://api.example.com/v1
+tags:
+  - name: en
+    description: Wordle用の単語検索APIです。
+  - name: ja
+    description: WORDLEja用の単語検索APIです。
+paths:
+  /search:
+    get:
+      tags:
+        - en
+        - ja
+      summary: Wordle単語絞り込み検索API
+      description: |
+        指定したクエリ等から単語を絞り込み検索し、単語の一覧を取得します。<br>
+        単語の検索に際しては、**in -> q -> not系 -> exclude** の順で処理が行われます。<br><br>
+        **search**については ***q* か *in* のどちらかの情報**を**必ず**入力しないと**エラーになります**。
+      operationId: search
+      parameters:
+        - $ref: "#/components/parameters/q"
+        - $ref: "#/components/parameters/in"
+        - $ref: "#/components/parameters/exclude"
+        - $ref: "#/components/parameters/not1"
+        - $ref: "#/components/parameters/not2"
+        - $ref: "#/components/parameters/not3"
+        - $ref: "#/components/parameters/not4"
+        - $ref: "#/components/parameters/not5"
+        - $ref: "#/components/parameters/answer"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/result_search"
+        400:
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /hint:
+    get:
+      tags:
+        - en
+        - ja
+      summary: Wordle単語絞り込みヒンティングAPI
+      description: |
+        指定したクエリ等から単語を絞り込み検索し、1単語だけランダムに選択します。<br>
+        単語の検索に際しては、**in -> q -> not系 -> exclude** の順で処理が行われます。
+      operationId: hint
+      parameters:
+        - $ref: "#/components/parameters/q"
+        - $ref: "#/components/parameters/in"
+        - $ref: "#/components/parameters/exclude"
+        - $ref: "#/components/parameters/not1"
+        - $ref: "#/components/parameters/not2"
+        - $ref: "#/components/parameters/not3"
+        - $ref: "#/components/parameters/not4"
+        - $ref: "#/components/parameters/not5"
+        - $ref: "#/components/parameters/answer"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/result_hint"
+        400:
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+components:
+  parameters:
+    q:
+      in: query
+      name: q
+      description: |
+        指定された箇所に合致する文字（緑色になった文字）を含む単語を検索します。<br><br>
+        **-**（半角ハイフン）は無指定を意味する特殊な記号として処理されます。<br>
+        **必ず**5文字でなければなりません。
+      schema:
+        type: string
+        default: -----
+      examples:
+        en_a:
+          summary: 【Wordle用】[a] から始まる単語を検索
+          value: a----
+        en_r:
+          summary: 【Wordle用】3文字目に [r] を含む単語を検索
+          value: --r--
+        en_y:
+          summary: 【Wordle用】[y] で終わる単語を検索
+          value: ----y
+        ja_a:
+          summary: 【WORDLEja用】「あ」から始まる単語を検索
+          value: あ----
+        ja_ka:
+          summary: 【WORDLEja用】2文字目に「か」を含む単語を検索
+          value: -か---
+        ja_nn:
+          summary: 【WORDLEja用】「ん」で終わる単語を検索
+          value: ----ん
+    in:
+      in: query
+      name: in
+      description: |
+        指定した文字（黄色になった文字）を含む単語を検索します。<br><br>
+        *a-z* もしくは **ぁ-ん（ゐ・ゑ除く）**、**ー（長音記号）**が指定できます。<br>
+        これら以外の文字は不正な文字として無視されます（区切り文字は必要ありませんが、区切り文字を用いても問題はありません）。<br>
+        **必ず**5文字以内でなければなりません。
+      schema:
+        type: string
+        default: ""
+      examples:
+        en_a:
+          summary: 【Wordle用】[a] を含む単語を検索
+          value: a
+        en_rs:
+          summary: 【Wordle用】[r, s] を含む単語を検索
+          value: rs
+        en_yar:
+          summary: 【Wordle用】[y, a, r] を含む単語を検索
+          value: yar
+        ja_a:
+          summary: 【WORDLEja用】「あ」を含む単語を検索
+          value: あ
+        ja_kaki:
+          summary: 【WORDLEja用】「か、き」を含む単語を検索
+          value: かき
+        ja_nnbou:
+          summary: 【WORDLEja用】「ん、ー」を含む単語を検索
+          value: んー
+    exclude:
+      in: query
+      name: exclude
+      description: |
+        【オプション】指定した文字（除外された文字）を除く単語を検索します。<br><br>
+        *a-z* もしくは **ぁ-ん（ゐ・ゑ除く）**、**ー（長音記号）**が指定できます。<br>
+        これら以外の文字は不正な文字として無視されます（区切り文字は必要ありませんが、区切り文字を用いても問題はありません）。
+      required: false
+      schema:
+        type: string
+        default: ""
+      examples:
+        en_a:
+          summary: 【Wordle用】[a] を除く単語を検索
+          value: a
+        en_qzm:
+          summary: 【Wordle用】[q, z, m] を除く単語を検索
+          value: qzm
+        ja_a:
+          summary: 【WORDLEja用】「あ」を除く単語を検索
+          value: あ
+        ja_nnboudopo:
+          summary: 【WORDLEja用】「ん、ー、ど、ぽ」を除く単語を検索
+          value: んーどぽ
+    not1:
+      in: query
+      name: not1
+      description: |
+        【オプション】指定した文字が1文字目に現れない単語を検索します。<br><br>
+        *a-z* もしくは **ぁ-ん（ゐ・ゑ除く）**、**ー（長音記号）**が指定できます。<br>
+        これら以外の文字は不正な文字として無視されます（区切り文字は必要ありませんが、区切り文字を用いても問題はありません）。
+      required: false
+      schema:
+        type: string
+        default: ""
+      example: abc
+    not2:
+      in: query
+      name: not2
+      description: |
+        【オプション】指定した文字が2文字目に現れない単語を検索します。<br><br>
+        *a-z* もしくは **ぁ-ん（ゐ・ゑ除く）**、**ー（長音記号）**が指定できます。<br>
+        これら以外の文字は不正な文字として無視されます（区切り文字は必要ありませんが、区切り文字を用いても問題はありません）。
+      required: false
+      schema:
+        type: string
+        default: ""
+      example: def
+    not3:
+      in: query
+      name: not3
+      description: |
+        【オプション】指定した文字が3文字目に現れない単語を検索します。<br><br>
+        *a-z* もしくは **ぁ-ん（ゐ・ゑ除く）**、**ー（長音記号）**が指定できます。<br>
+        これら以外の文字は不正な文字として無視されます（区切り文字は必要ありませんが、区切り文字を用いても問題はありません）。
+      required: false
+      schema:
+        type: string
+        default: ""
+      example: ghi
+    not4:
+      in: query
+      name: not4
+      description: |
+        【オプション】指定した文字が4文字目に現れない単語を検索します。<br><br>
+        *a-z* もしくは **ぁ-ん（ゐ・ゑ除く）**、**ー（長音記号）**が指定できます。<br>
+        これら以外の文字は不正な文字として無視されます（区切り文字は必要ありませんが、区切り文字を用いても問題はありません）。
+      required: false
+      schema:
+        type: string
+        default: ""
+      example: jkl
+    not5:
+      in: query
+      name: not5
+      description: |
+        【オプション】指定した文字が5文字目に現れない単語を検索します。<br><br>
+        *a-z* もしくは **ぁ-ん（ゐ・ゑ除く）**、**ー（長音記号）**が指定できます。<br>
+        これら以外の文字は不正な文字として無視されます（区切り文字は必要ありませんが、区切り文字を用いても問題はありません）。
+      required: false
+      schema:
+        type: string
+        default: ""
+      example: opq
+    answer:
+      in: query
+      name: answer
+      description: |
+        **【Wordle 専用】**解答に用いられているリスト内からのみ検索します。<br><br>
+        [*1*, *on*, *true*, *yes*] のいずれかの値を入力します。<br>
+        どの値を入力しても効果は同じです。<br><br>
+        **\* WORDLEjaにおいてはこの値は無視されます。**
+      required: false
+      schema:
+        type: string
+        enum:
+          - "1"
+          - "on"
+          - "true"
+          - "yes"
+  schemas:
+    result_search:
+      type: object
+      properties:
+        query:
+          type: string
+        include:
+          type: string
+        options:
+          type: object
+          properties:
+            exclude:
+              type: string
+            not1:
+              type: string
+            not2:
+              type: string
+            not3:
+              type: string
+            not4:
+              type: string
+            not5:
+              type: string
+        result:
+          type: array
+          items:
+            type: string
+      example:
+        query: あ----
+        include: か
+        options:
+          exclude: ら
+          not1: ""
+          not2: ""
+          not3: ""
+          not4: ""
+          not5: い,う,か
+        result:
+          - あいてかた
+          - あかちゃん
+          - あしがかり
+          - あたたかみ
+          - あまやかす
+          - あめりかん
+    result_hint:
+      type: object
+      properties:
+        query:
+          type: string
+        include:
+          type: string
+        options:
+          type: object
+          properties:
+            exclude:
+              type: string
+            not1:
+              type: string
+            not2:
+              type: string
+            not3:
+              type: string
+            not4:
+              type: string
+            not5:
+              type: string
+        result:
+          type: array
+          items:
+            type: string
+      example:
+        query: c---c
+        include: ""
+        options:
+          exclude: qwert
+          not1: ""
+          not2: ""
+          not3: ""
+          not4: ""
+          not5: ""
+        result:
+          - civic
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      example:
+        error: E001
+        message:
+          指定されたクエリが5文字ではありません
