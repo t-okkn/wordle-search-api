@@ -232,7 +232,7 @@ components:
       name: answer
       description: |
         **【Wordle 専用】**解答に用いられているリスト内からのみ検索します。<br><br>
-        [*1*, *on*, *true*, *yes*] のいずれかの値を入力します。<br>
+        [*1*, *yes*, *y*, *true*, *t*] のいずれかの値を入力します。<br>
         どの値を入力しても効果は同じです。<br><br>
         **\* WORDLEjaにおいてはこの値は無視されます。**
       required: false
@@ -240,9 +240,10 @@ components:
         type: string
         enum:
           - "1"
-          - "on"
-          - "true"
           - "yes"
+          - "y"
+          - "true"
+          - "t"
   schemas:
     result_search:
       type: object

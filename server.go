@@ -276,7 +276,10 @@ func (v Lang) getResult(ss models.SearcherSet, answer string) []string {
 
 	list := []string{}
 	if v == EN {
-		if ans == "1" || ans == "true" || ans == "yes" || ans == "on" {
+		if ans == "1" ||
+			ans == "yes" || ans == "y" ||
+			ans == "true" || ans == "t" {
+
 			list = EWordsAns
 		} else {
 			list = EWordsAll
